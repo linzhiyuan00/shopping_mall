@@ -1,48 +1,136 @@
 <template>
   <div class="index">
-    <div class="top">
-      <div class="logo">
-        <img class="logo_img" src="../assets/img/logo.png" alt />
-      </div>
-      <div class="tologin">
-        <span>登录</span>
-        <Divider type="vertical" />
-        <span>注册</span>
-      </div>
-    </div>
     <div class="content">
       <div class="lunbotu">
-        <Carousel v-model="value1" loop>
+        <Carousel v-model="value1" loop autoplay :autoplay-speed="3000">
           <CarouselItem>
             <div class="demo-carousel">
-              <img class="demo-img" src="../assets/img/tile_macos_large.jpg" />
+              <img class="demo-img" src="../assets/img/index_lunbo1.jpg" />
             </div>
           </CarouselItem>
           <CarouselItem>
             <div class="demo-carousel">
-              <img class="demo-img" src="../assets/img/iphone_square_large.jpg" />
+              <img class="demo-img" src="../assets/img/index_lunbo2.jpg" />
             </div>
           </CarouselItem>
           <CarouselItem>
             <div class="demo-carousel">
-              <img class="demo-img" src="../assets/img/22d94f6e50d98f6f68308814ff9795e2.jpg" />
+              <img class="demo-img" src="../assets/img/index_lunbo3.jpg" />
             </div>
           </CarouselItem>
           <CarouselItem>
             <div class="demo-carousel">
-              <img class="demo-img" src="../assets/img/macbookpro_large.jpg" />
+              <img class="demo-img" src="../assets/img/index_lunbo4.jpg" />
             </div>
           </CarouselItem>
           <CarouselItem>
             <div class="demo-carousel">
-              <img class="demo-img" src="../assets/img/holiday_hero_subhead_2a_largetall.jpg" />
+              <img class="demo-img" src="../assets/img/index_lunbo5.jpg" />
             </div>
           </CarouselItem>
         </Carousel>
       </div>
-    </div>
-    <div class="footer">
-      <p>啦啦啦啦 我是底部</p>
+      <div class="shops_body">
+        <div class="classify_mod">
+          <div class="mod_title">手机</div>
+          <div class="mod_productshow">
+            <Card class="product_box">
+              <div class="tip">华为P40</div>
+              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            </Card>
+            <Card class="product_box">
+              <div class="tip">华为P40</div>
+              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            </Card>
+            <Card class="product_box">
+              <div class="tip">华为P40</div>
+              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            </Card>
+            <Card class="product_box">
+              <div class="tip">华为P40</div>
+              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            </Card>
+            <Card class="Jumptip">
+              <router-link class="classifyjump" to="/Home/Phone">手机专区</router-link>
+            </Card>
+          </div>
+        </div>
+        <div class="classify_mod">
+          <div class="mod_title">平板</div>
+          <div class="mod_productshow">
+            <Card class="product_box">
+              <div class="tip">华为P40</div>
+              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            </Card>
+            <Card class="product_box">
+              <div class="tip">华为P40</div>
+              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            </Card>
+            <Card class="product_box">
+              <div class="tip">华为P40</div>
+              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            </Card>
+            <Card class="product_box">
+              <div class="tip">华为P40</div>
+              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            </Card>
+            <Card class="Jumptip">
+              <router-link class="classifyjump" to="/Home/Flat">平板专区</router-link>
+            </Card>
+          </div>
+        </div>
+        <div class="classify_mod">
+          <div class="mod_title">笔记本</div>
+          <div class="mod_productshow">
+            <Card class="product_box">
+              <div class="tip">华为P40</div>
+              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            </Card>
+            <Card class="product_box">
+              <div class="tip">华为P40</div>
+              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            </Card>
+            <Card class="product_box">
+              <div class="tip">华为P40</div>
+              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            </Card>
+            <Card class="product_box">
+              <div class="tip">华为P40</div>
+              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            </Card>
+            <Card class="Jumptip">
+              <router-link class="classifyjump" to="/Home/NoteBook">笔记本专区</router-link>
+            </Card>
+          </div>
+        </div>
+        <div class="classify_mod">
+          <div class="mod_title">配件</div>
+          <div class="mod_productshow">
+            <Card class="product_box">
+              <div class="tip">华为P40</div>
+              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            </Card>
+            <Card class="product_box">
+              <div class="tip">华为P40</div>
+              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            </Card>
+            <Card class="product_box">
+              <div class="tip">华为P40</div>
+              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            </Card>
+            <Card class="product_box">
+              <div class="tip">华为P40</div>
+              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            </Card>
+            <Card class="Jumptip">
+              <router-link class="classifyjump" to="/Home/Parts">配件专区</router-link>
+            </Card>
+          </div>
+        </div>
+      </div>
+      <div class="index_footer">
+        <span>我是有底线的</span>
+      </div>
     </div>
   </div>
 </template>
@@ -52,47 +140,16 @@ export default {
     return {
       value1: 0
     };
+  },
+  methods: {
+    lll() {
+      console.log("111");
+    }
   }
 };
 </script>
 <style lang="less">
 .index {
-  .top {
-    width: 100%;
-    height: 80px;
-    // &:after {
-    //   content: "";
-    //   display: table;
-    //   clear: both;
-    //   visibility: hidden;
-    //   font-size: 0;
-    //   height: 0;
-    // }
-    .logo {
-      width: 180px;
-      height: 80px;
-      float: left;
-      padding: 10px;
-      .logo_img {
-        width: 180px;
-        height: 60px;
-      }
-    }
-    .tologin {
-
-      // display: inline-block;
-      cursor: pointer;
-      font-size: 20px;
-      width: 100PX;
-      height: 80px;
-      padding: 25px 0;
-      margin-right: 10px;
-      line-height: 26px;
-      font-weight: 400;
-      color: #8195e4;
-      float: right;
-    }
-  }
   .content {
     width: 100%;
     .lunbotu {
@@ -103,12 +160,77 @@ export default {
         height: 400px;
       }
     }
-  }
-  .footer {
-    position: fixed;
-    width: 100%;
-    height: 50px;
-    bottom: 0px;
+    .shops_body {
+      width: 1200px;
+      padding: 20px 30px;
+      margin: auto;
+      .classify_mod {
+        width: 100%;
+        height: 305px;
+        margin: 10px;
+        .mod_title {
+          padding-left: 30px;
+          color: #aeaeae;
+          width: 100%;
+          height: 50px;
+          font-size: 30px;
+          line-height: 40px;
+        }
+        .mod_productshow {
+          width: 100%;
+          height: 250px;
+          padding: 20px;
+          &:after {
+            content: "";
+            display: table;
+            clear: both;
+            visibility: hidden;
+            font-size: 0;
+            height: 0;
+          }
+          .product_box {
+            text-align: center;
+            // display: inline-block;
+            background-color: #ffbd34;
+            margin-right: 20px;
+            float: left;
+            width: 200px;
+            height: 200px;
+            .tip{
+              background-color: #fff;
+              height: 40px;
+              width: 100%;
+              font-size: 15px;
+              line-height: 40px;
+              color: cadetblue;
+            }
+          }
+          .Jumptip {
+            width: 100px;
+            height: 200px;
+            background-color: #ffbd34;
+            float: left;
+            .classifyjump {
+              display: inline-block;
+              width: 100px;
+              height: 200px;
+              padding: 50px 20px;
+              font-size: 20px;
+              line-height: 40px;
+            }
+          }
+        }
+      }
+    }
+    .index_footer {
+      width: 100%;
+      height: 80px;
+      background-color: #333333;
+      font-size: 20px;
+      line-height: 80px;
+      color: #686868;
+      text-align: center;
+    }
   }
 }
 </style>

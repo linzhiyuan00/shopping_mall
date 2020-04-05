@@ -55,13 +55,9 @@ instance_formdata.interceptors.response.use(function (response) {
   return Promise.reject(error)
 })
 
-// // 添加换页中断请求
-// router.beforeEach((to, from, next) => {
-//   const source = axios.CancelToken.source();
-//   clearRequest.source.cancel && clearRequest.source.cancel('canel-request');
-//   clearRequest.source = source;
-//   next()
-// })
+router.afterEach((to,from,next) => {
+  window.scrollTo(0,0);
+})
 
 Vue.prototype.$http = instance
 Vue.prototype.$http_formdata = instance_formdata

@@ -5,23 +5,23 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    willaduitsum:0,
-    Login:false
+    Login:true,
+    isadmin:true
   },
   mutations: {
-    WILLADUITSUM(state,sum){
-      state.willaduitsum = sum;
-    },
     LOGIN_STATE(state,login){
       state.Login = login;
+    },
+    ADMIN_STATE(state,admin){
+      state.isadmin = admin;
     }
   },
   actions: {
-    update_willaduitsum(context,sum){
-      context.commit('WILLADUITSUM',sum);
-    },
     update_loginstate(context,login){
       context.commit('LOGIN_STATE',login);
+    },
+    update_isadmin(context,admin){
+      context.commit('ADMIN_STATE',admin);
     }
   },
   modules: {}

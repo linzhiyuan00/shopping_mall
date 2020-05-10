@@ -34,21 +34,9 @@
         <div class="classify_mod">
           <div class="mod_title">手机</div>
           <div class="mod_productshow">
-            <Card class="product_box">
-              <div class="tip">华为P40</div>
-              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
-            </Card>
-            <Card class="product_box">
-              <div class="tip">华为P40</div>
-              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
-            </Card>
-            <Card class="product_box">
-              <div class="tip">华为P40</div>
-              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
-            </Card>
-            <Card class="product_box">
-              <div class="tip">华为P40</div>
-              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            <Card class="product_box" v-for="(item) in phonedata" :key="item.goods_id">
+              <div class="tip">{{item.goods_name}}</div>
+              <img style="width:200px;height:160px" :src="item.logo" alt @click="lll" />
             </Card>
             <Card class="Jumptip">
               <router-link class="classifyjump" to="/Home/Phone">手机专区</router-link>
@@ -58,21 +46,9 @@
         <div class="classify_mod">
           <div class="mod_title">平板</div>
           <div class="mod_productshow">
-            <Card class="product_box">
-              <div class="tip">华为P40</div>
-              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
-            </Card>
-            <Card class="product_box">
-              <div class="tip">华为P40</div>
-              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
-            </Card>
-            <Card class="product_box">
-              <div class="tip">华为P40</div>
-              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
-            </Card>
-            <Card class="product_box">
-              <div class="tip">华为P40</div>
-              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            <Card class="product_box" v-for="(item) in notebookdata" :key="item.goods_id">
+              <div class="tip">{{item.goods_name}}</div>
+              <img style="width:200px;height:160px" :src="item.logo" alt @click="lll" />
             </Card>
             <Card class="Jumptip">
               <router-link class="classifyjump" to="/Home/Flat">平板专区</router-link>
@@ -82,21 +58,9 @@
         <div class="classify_mod">
           <div class="mod_title">笔记本</div>
           <div class="mod_productshow">
-            <Card class="product_box">
-              <div class="tip">华为P40</div>
-              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
-            </Card>
-            <Card class="product_box">
-              <div class="tip">华为P40</div>
-              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
-            </Card>
-            <Card class="product_box">
-              <div class="tip">华为P40</div>
-              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
-            </Card>
-            <Card class="product_box">
-              <div class="tip">华为P40</div>
-              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            <Card class="product_box" v-for="(item) in flatdata" :key="item.goods_id">
+              <div class="tip">{{item.goods_name}}</div>
+              <img style="width:200px;height:160px" :src="item.logo" alt @click="lll" />
             </Card>
             <Card class="Jumptip">
               <router-link class="classifyjump" to="/Home/NoteBook">笔记本专区</router-link>
@@ -106,21 +70,9 @@
         <div class="classify_mod">
           <div class="mod_title">配件</div>
           <div class="mod_productshow">
-            <Card class="product_box">
-              <div class="tip">华为P40</div>
-              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
-            </Card>
-            <Card class="product_box">
-              <div class="tip">华为P40</div>
-              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
-            </Card>
-            <Card class="product_box">
-              <div class="tip">华为P40</div>
-              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
-            </Card>
-            <Card class="product_box">
-              <div class="tip">华为P40</div>
-              <img style="width:200px;height:160px" src="@/assets/img/bg.png" alt @click="lll" />
+            <Card class="product_box" v-for="(item) in partsdata" :key="item.goods_id">
+              <div class="tip">{{item.goods_name}}</div>
+              <img style="width:200px;height:160px" :src="item.logo" alt @click="lll" />
             </Card>
             <Card class="Jumptip">
               <router-link class="classifyjump" to="/Home/Parts">配件专区</router-link>
@@ -138,13 +90,80 @@
 export default {
   data() {
     return {
-      value1: 0
+      value1: 0,
+      phonedata: [],
+      notebookdata: [],
+      flatdata: [],
+      partsdata: []
     };
   },
   methods: {
     lll() {
       console.log("111");
+    },
+    getphone() {
+      let data = {
+        currentPage: 1,
+        pageSize: 4,
+        classification: 1
+      };
+      this.$http.post("kxlGoods/selectAllGoods", data).then(res => {
+        if (res.data.code == 101) {
+          this.phonedata = res.data.data.data;
+        } else {
+          this.$Message.error(res.data.message);
+        }
+      });
+    },
+    getflatdata() {
+      let data = {
+        currentPage: 1,
+        pageSize: 4,
+        classification: 2
+      };
+      this.$http.post("kxlGoods/selectAllGoods", data).then(res => {
+        if (res.data.code == 101) {
+          this.flatdata = res.data.data.data;
+        } else {
+          this.$Message.error(res.data.message);
+        }
+      });
+    },
+    getnotebook() {
+      let data = {
+        currentPage: 1,
+        pageSize: 4,
+        classification: 3
+      };
+      this.$http.post("kxlGoods/selectAllGoods", data).then(res => {
+        if (res.data.code == 101) {
+          this.notebookdata = res.data.data.data;
+        } else {
+          this.$Message.error(res.data.message);
+        }
+      });
+    },
+    getparts() {
+      let data = {
+        currentPage: 1,
+        pageSize: 4,
+        classification: 4
+      };
+      this.$http.post("kxlGoods/selectAllGoods", data).then(res => {
+        if (res.data.code == 101) {
+          this.partsdata = res.data.data.data;
+        } else {
+          this.$Message.error(res.data.message);
+        }
+      });
     }
+  },
+  mounted() {
+    // 获取首页商品数据
+    this.getphone();
+    this.getparts();
+    this.getnotebook();
+    this.getflatdata();
   }
 };
 </script>
@@ -191,18 +210,20 @@ export default {
           .product_box {
             text-align: center;
             // display: inline-block;
-            background-color: #ffbd34;
+            // background-color: #ffbd34;
+            border: solid 1px #ffbd34;
             margin-right: 20px;
             float: left;
             width: 200px;
             height: 200px;
-            .tip{
+            .tip {
               background-color: #fff;
               height: 40px;
               width: 100%;
               font-size: 15px;
               line-height: 40px;
               color: cadetblue;
+              border-bottom: solid 1px #ffbd34;
             }
           }
           .Jumptip {

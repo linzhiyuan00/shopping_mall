@@ -3,7 +3,21 @@
     <router-view />
   </div>
 </template>
-
+<script>
+export default {
+  data() {
+    return {
+      
+    }
+  },
+  mounted() {
+    this.$Message.config({
+        top: 100,
+        duration: 2
+      });
+  },
+}
+</script>
 <style lang="less">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

@@ -5,6 +5,7 @@ import Home from "../views/Home.vue";
 import Cart from "../views/Cart.vue";
 import Login from "../views/Login.vue";
 import UserInfo from "../views/UserInfo.vue";
+import Usermanage from "../views/Usermanage.vue";
 
 // 分类
 import index from "../views/index.vue";
@@ -72,6 +73,11 @@ const routes = [
         path:'/Home/UserInfo',
         name: "UserInfo",
         component: UserInfo,
+      },
+      {
+        path:'/Home/Usermanage',
+        name: "Usermanage",
+        component: Usermanage,
       },
       {
         path:'/Home/AddProduct',

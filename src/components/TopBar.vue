@@ -4,11 +4,11 @@
       <img class="logo_img" src="../assets/img/logo.png" alt />
     </div>
     <div class="classify">
-      <router-link class="classifyshop" to="/Home/index">首页</router-link>
-      <router-link class="classifyshop" to="/Home/Phone">手机</router-link>
-      <router-link class="classifyshop" to="/Home/Flat">平板</router-link>
-      <router-link class="classifyshop" to="/Home/NoteBook">笔记本</router-link>
-      <router-link class="classifyshop" to="/Home/Parts">配件</router-link>
+      <router-link class="classifyshop" to="/Home/index" :class="route_active == 0 ? 'active' :''">首页</router-link>
+      <router-link class="classifyshop" to="/Home/Phone" :class="route_active == 1 ? 'active' :''">手机</router-link>
+      <router-link class="classifyshop" to="/Home/Flat" :class="route_active == 2 ? 'active' :''">平板</router-link>
+      <router-link class="classifyshop" to="/Home/NoteBook" :class="route_active == 3 ? 'active' :''">笔记本</router-link>
+      <router-link class="classifyshop" to="/Home/Parts" :class="route_active == 4 ? 'active' :''">配件</router-link>
     </div>
     <div class="tologin" v-if="login == false">
       <router-link class="classifyshop" to="/Home/Login">登录</router-link>
@@ -28,6 +28,9 @@
           <MenuItem name="3" v-show="admin == true">
             <router-link class="classifyshop" to="/Home/AddProduct">管理员添加商品</router-link>
           </MenuItem>
+          <MenuItem name="4" v-show="admin == true">
+            <router-link class="classifyshop" to="/Home/Usermanage">用户管理</router-link>
+          </MenuItem>
         </Submenu>
       </Menu>
     </div>
@@ -41,7 +44,8 @@ export default {
   data() {
     return {
       login: false,
-      admin:false
+      admin:false,
+      route_active:0
     };
   },
   methods: {
@@ -64,6 +68,19 @@ export default {
         this.admin = false;
       }
     },
+    "$route":function(data){
+      if(data.name == 'index'){
+        this.route_active = 0;
+      }else if(data.name == 'Phone'){
+        this.route_active = 1;
+      }else if(data.name == 'Flat'){
+        this.route_active = 2;
+      }else if(data.name == 'NoteBook'){
+        this.route_active = 3;
+      }else if(data.name == 'Parts'){
+        this.route_active = 4;
+      }
+    }
   },
   mounted() {
     if (this.$store.state.Login == true) {
@@ -81,18 +98,22 @@ export default {
 </script>
 <style lang="less">
 .topbar {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 80px;
   background-color: #f9f9f9;
   border-bottom: 2px solid #e5e5e5;
-  // &:after {
-  //   content: "";
-  //   display: table;
-  //   clear: both;
-  //   visibility: hidden;
-  //   font-size: 0;
-  //   height: 0;
-  // }
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+    visibility: hidden;
+    font-size: 0;
+    height: 0;
+  }
   .logo {
     width: 180px;
     height: 80px;
@@ -116,6 +137,9 @@ export default {
       height: 58px;
       padding: 0 20px;
       &:hover {
+        border-bottom: 2px #337ab7 solid;
+      }
+      &.active {
         border-bottom: 2px #337ab7 solid;
       }
     }

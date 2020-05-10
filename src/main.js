@@ -10,24 +10,23 @@ import 'iview/dist/styles/iview.css'
 // 引入home组件的全局less
 import '@/common/homeCommon.less'
 
-
 import {instance,instance_formdata, axios, clearRequest} from './common/http';
 
 // 添加响应拦截器(当响应回复回登陆页时跳转)
 instance.interceptors.response.use(function (response) {
   // 是否返回登陆页
   let origin = window.location.origin;
-  if (response.data.code == '201') {
-    if(window.location.href.includes('53kf')){
-      window.location.href =
-      "https://usermanagement.53kf.com/#/?url=" + 'https://callcenter.53kf.com/#/home/WillAudit';
-    }else{
-      window.location.href =
-      "https://usermanagement.71baomu.com/#/?url=" + 'https://callcenter.71baomu.com/#/home/WillAudit';
-    }
+  // if (response.data.code == '201') {
+  //   if(window.location.href.includes('53kf')){
+  //     window.location.href =
+  //     "https://usermanagement.53kf.com/#/?url=" + 'https://callcenter.53kf.com/#/home/WillAudit';
+  //   }else{
+  //     window.location.href =
+  //     "https://usermanagement.71baomu.com/#/?url=" + 'https://callcenter.71baomu.com/#/home/WillAudit';
+  //   }
    
-    return new Promise(() => {})// 不进入请求返回层，防止弹出提示
-  }
+  //   return new Promise(() => {})// 不进入请求返回层，防止弹出提示
+  // }
 
   return response
 }, function (error) {
@@ -37,17 +36,17 @@ instance.interceptors.response.use(function (response) {
 instance_formdata.interceptors.response.use(function (response) {
   // 是否返回登陆页
   let origin = window.location.origin;
-  if (response.data.code == '201') {
-    if(window.location.href.includes('53kf')){
-      window.location.href =
-      "https://usermanagement.53kf.com/#/?url=" + 'https://callcenter.53kf.com/#/home/WillAudit';
-    }else{
-      window.location.href =
-      "https://usermanagement.71baomu.com/#/?url=" + 'https://callcenter.71baomu.com/#/home/WillAudit';
-    }
+  // if (response.data.code == '201') {
+  //   if(window.location.href.includes('53kf')){
+  //     window.location.href =
+  //     "https://usermanagement.53kf.com/#/?url=" + 'https://callcenter.53kf.com/#/home/WillAudit';
+  //   }else{
+  //     window.location.href =
+  //     "https://usermanagement.71baomu.com/#/?url=" + 'https://callcenter.71baomu.com/#/home/WillAudit';
+  //   }
    
-    return new Promise(() => {})// 不进入请求返回层，防止弹出提示
-  }
+  //   return new Promise(() => {})// 不进入请求返回层，防止弹出提示
+  // }
 
   return response
 }, function (error) {

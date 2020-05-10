@@ -46,9 +46,19 @@
           </Card>
         </div>
       </div>
-      <div class="index_footer">
+      <Page
+        :current="currentPage"
+        :page-size="pageSize"
+        :total="tablecount"
+        show-total
+        show-sizer
+        @on-change="currpage_change"
+        @on-page-size-change="pagesize_change"
+        style="float:right;margin:20px"
+      />
+      <!-- <div class="index_footer">
         <span>我是有底线的</span>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -57,50 +67,46 @@ export default {
   data() {
     return {
       value1: 2,
-      phoneList: [
-        {
-          id: 11,
-          name: "111",
-          price: "22"
-        },
-        {
-          id: 112,
-          name: "111",
-          price: "22"
-        },
-        {
-          id: 11444,
-          name: "111",
-          price: "22"
-        },
-        {
-          id: 1123,
-          name: "111",
-          price: "22"
-        },
-        {
-          id: 11245,
-          name: "111",
-          price: "22"
-        },
-        {
-          id: 11908,
-          name: "111",
-          price: "22"
-        },
-        {
-          id: 11434342,
-          name: "111",
-          price: "22"
-        }
-      ]
+      phoneList: [],
+       // 分页
+      tablecount: 10,
+      currentPage: 1,
+      pageSize: 10,
     };
   },
   methods: {
+    // 页码改变
+    currpage_change(pagenum){
+      this.currentPage = currpage;
+      this.getflatdata();
+    },
+    pagesize_change(pagesize){
+      this.pageSize = pagesize;
+      this.currentPage = 1;
+      this.getflatdata();
+    },
     lll() {
       console.log("111");
-    }
-  }
+    },
+    getflatdata() {
+      let data = {
+        currentPage: this.currentPage,
+        pageSize: this.pageSize,
+        classification: 2
+      };
+      this.$http.post("kxlGoods/selectAllGoods", data).then(res => {
+        if (res.data.code == 101) {
+          this.phoneList = res.data.data.data;
+          this.tablecount = res.data.data.count;
+        } else {
+          this.$Message.error(res.data.message);
+        }
+      });
+    },
+  },
+  mounted() {
+    this.getflatdata();
+  },
 };
 </script>
 <style lang="less">
@@ -155,8 +161,8 @@ export default {
               font-size: 20px;
               padding: 10px;
               width: 100%;
-              height: 60px;
-              line-height: 40px;
+              height: 40px;
+              line-height: 20px;
             }
           }
         }

@@ -7,8 +7,7 @@ const clearRequest = {
 
 // 普通请求
 const instance = axios.create({
-	baseURL: location.href.includes('callcenter.53kf.com')? 'https://ccsmanagement.53kf.com/ccsmanagement' :'https://ccsmanagement.71baomu.com/ccsmanagement',
-	// baseURL: process.env.NODE_ENV=='production'? 'https://usermanagement.53kf.com' :'https://usermanagement.71baomu.com',
+	baseURL: 'https://usermanagement.71baomu.com/newsaasmanage/',
 	// headers: {
 	// 	"Access-Control-Allow-Origin" : "*",
 	// 	// "X-Requested-With" : 'XMLHttpRequest',
@@ -31,7 +30,7 @@ const instance = axios.create({
 
 // form-data请求
 const instance_formdata = axios.create({
-	baseURL: location.href.includes('callcenter.53kf.com')? 'https://ccsmanagement.53kf.com/ccsmanagement' :'https://ccsmanagement.71baomu.com/ccsmanagement',
+	baseURL: 'https://usermanagement.71baomu.com/newsaasmanage/',
 	headers: {
 		"Content-Type": "multipart/form-data"
 	

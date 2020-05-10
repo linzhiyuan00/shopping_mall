@@ -32,23 +32,36 @@
         </Carousel>
       </div>
       <div class="shops_body">
-        <div class="product_box" v-for=" item of phoneList" :key="item.id">
+        <div class="product_box" v-for=" item of phoneList" :key="item.goods_id">
           <Card class="product_card">
-            <img style="width:380px;height:300px" src="@/assets/img/bg.png" alt @click="lll" />
+            <div style="width:380px;height:300px">
+              <img style="width:380px;height:300px" :src="item.logo" alt @click="lll" />
+            </div>
             <div class="describe">
+              <div class="price">{{item.goods_name}}</div>
               <div class="price">
                 ￥
-                <span style="color:#f61700">{{item.price}}</span>
+                <span style="color:#f61700">{{item.goods_price}}</span>
               </div>
-                <Button style="margin-right:20px" type="primary">添加购物车</Button>
-                <Button type="error">直接购买</Button>
+              <Button style="margin-right:20px" type="primary">添加购物车</Button>
+              <Button type="error">直接购买</Button>
             </div>
           </Card>
         </div>
       </div>
-      <div class="index_footer">
+      <Page
+        :current="currentPage"
+        :page-size="pageSize"
+        :total="tablecount"
+        show-total
+        show-sizer
+        @on-change="currpage_change"
+        @on-page-size-change="pagesize_change"
+        style="float:right;margin:20px"
+      />
+      <!-- <div class="index_footer">
         <span>我是有底线的</span>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -57,49 +70,45 @@ export default {
   data() {
     return {
       value1: 1,
-      phoneList: [
-        {
-          id: 11,
-          name: "111",
-          price: "22"
-        },
-        {
-          id: 112,
-          name: "111",
-          price: "22"
-        },
-        {
-          id: 11444,
-          name: "111",
-          price: "22"
-        },
-        {
-          id: 1123,
-          name: "111",
-          price: "22"
-        },
-        {
-          id: 11245,
-          name: "111",
-          price: "22"
-        },
-        {
-          id: 11908,
-          name: "111",
-          price: "22"
-        },
-        {
-          id: 11434342,
-          name: "111",
-          price: "22"
-        }
-      ]
+      phoneList: [],
+      // 分页
+      tablecount: 10,
+      currentPage: 1,
+      pageSize: 10,
     };
   },
   methods: {
+    // 页码改变
+    currpage_change(pagenum){
+      this.currentPage = currpage;
+      this.getphone();
+    },
+    pagesize_change(pagesize){
+      this.pageSize = pagesize;
+      this.currentPage = 1;
+      this.getphone();
+    },
     lll() {
       console.log("111");
+    },
+    getphone() {
+      let data = {
+        currentPage: this.currentPage,
+        pageSize: this.pageSize,
+        classification: 1
+      };
+      this.$http.post("kxlGoods/selectAllGoods", data).then(res => {
+        if (res.data.code == 101) {
+          this.phoneList = res.data.data.data;
+          this.tablecount = res.data.data.count;
+        } else {
+          this.$Message.error(res.data.message);
+        }
+      });
     }
+  },
+  mounted() {
+    this.getphone();
   }
 };
 </script>
@@ -109,8 +118,8 @@ export default {
     width: 1000px;
     margin: auto;
     background-color: #e5e5e5;
-    .view_title{
-      color:#f61700;
+    .view_title {
+      color: #f61700;
       font-size: 25px;
       height: 50px;
       line-height: 50px;
@@ -155,8 +164,8 @@ export default {
               font-size: 20px;
               padding: 10px;
               width: 100%;
-              height: 60px;
-              line-height: 40px;
+              height: 40px;
+              line-height: 20px;
             }
           }
         }

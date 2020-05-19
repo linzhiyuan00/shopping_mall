@@ -6,6 +6,10 @@ import Cart from "../views/Cart.vue";
 import Login from "../views/Login.vue";
 import UserInfo from "../views/UserInfo.vue";
 import Usermanage from "../views/Usermanage.vue";
+import Adminmanage from "../views/Adminmanage.vue";
+import Storemanage from "../views/Storemanage.vue";
+import Goodsmanage from "../views/Goodsmanage.vue";
+import Ordermanage from "../views/Ordermanage.vue";
 
 // 分类
 import index from "../views/index.vue";
@@ -78,6 +82,26 @@ const routes = [
         path:'/Home/Usermanage',
         name: "Usermanage",
         component: Usermanage,
+      },
+      {
+        path:'/Home/Adminmanage',
+        name: "Adminmanage",
+        component: Adminmanage,
+      },
+      {
+        path:'/Home/Storemanage',
+        name: "Storemanage",
+        component: Storemanage,
+      },
+      {
+        path:'/Home/Ordermanage',
+        name: "Ordermanage",
+        component: Ordermanage,
+      },
+      {
+        path:'/Home/Goodsmanage',
+        name: "Goodsmanage",
+        component: Goodsmanage,
       },
       {
         path:'/Home/AddProduct',

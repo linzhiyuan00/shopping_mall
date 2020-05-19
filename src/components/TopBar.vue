@@ -31,6 +31,18 @@
           <MenuItem name="4" v-show="admin == true">
             <router-link class="classifyshop" to="/Home/Usermanage">用户管理</router-link>
           </MenuItem>
+          <MenuItem name="5" v-show="admin == true">
+            <router-link class="classifyshop" to="/Home/Adminmanage">管理员管理</router-link>
+          </MenuItem>
+          <MenuItem name="6" v-show="admin == true">
+            <router-link class="classifyshop" to="/Home/Storemanage">商家管理</router-link>
+          </MenuItem>
+          <MenuItem name="7" v-show="admin == true">
+            <router-link class="classifyshop" to="/Home/Goodsmanage">商品管理</router-link>
+          </MenuItem>
+          <MenuItem name="8" v-show="admin == true">
+            <router-link class="classifyshop" to="/Home/Ordermanage">订单管理</router-link>
+          </MenuItem>
         </Submenu>
       </Menu>
     </div>

@@ -1,11 +1,11 @@
 <template>
-  <div class="usermanage">
+  <div class="adminmanage">
     <div class="content">
-      <div class="view_title">用户管理</div>
-      <div class="usertable">
-        <Table border :columns="columns12" :data="userlist" height="450">
-          <template slot-scope="{ row }" slot="user_name">
-            <strong>{{ row.user_name }}</strong>
+      <div class="view_title">管理员管理</div>
+      <div class="admintable">
+        <Table border :columns="columns12" :data="adminlist" height="450">
+          <template slot-scope="{ row }" slot="admin_name">
+            <strong>{{ row.admin_name }}</strong>
           </template>
           <template slot-scope="{ row }" slot="action">
             <Button
@@ -14,7 +14,7 @@
               style="margin-right: 5px"
               @click="openeditaccountmodel(row)"
             >编辑</Button>
-            <Button type="error" size="small" @click="opendeleteusermodel(row)">删除</Button>
+            <Button type="error" size="small" @click="opendeleteadminmodel(row)">删除</Button>
           </template>
         </Table>
       </div>
@@ -30,34 +30,27 @@
       />
     </div>
 
-    <!-- 编辑 新增用户 -->
+    <!-- 编辑 新增管理员 -->
     <Modal
       v-model="accountModal.show"
       :title="accountModal.type"
       width="500"
       class-name="accountmodel"
-      @on-ok="edituser"
+      @on-ok="editadmin"
       ok-text="保存"
       @on-cancel="acountcancel"
     >
       <div class="row_box">
-        <div class="row_tip">用户ID：</div>
-        <Input class="row_input" v-model="user.id" placeholder="输入用户ID~" />
+        <div class="row_tip">管理员ID：</div>
+        <Input class="row_input" v-model="admin.id" placeholder="输入管理员ID~" />
       </div>
       <div class="row_box">
         <div class="row_tip">姓名：</div>
-        <Input class="row_input" v-model="user.name" placeholder="输入姓名~" />
-      </div>
-      <div class="row_box">
-        <div class="row_tip">性别：</div>
-        <RadioGroup v-model="user.sex" style="float:left">
-          <Radio label="男"></Radio>
-          <Radio label="女"></Radio>
-        </RadioGroup>
+        <Input class="row_input" v-model="admin.name" placeholder="输入姓名~" />
       </div>
       <!-- <div class="row_box">
         <div class="row_tip">权限：</div>
-        <Select v-model="user.permission" style="width:300px;float:left;">
+        <Select v-model="admin.permission" style="width:300px;float:left;">
           <Option
             v-for="item in permissionlist"
             :value="item.value"
@@ -67,18 +60,18 @@
       </div>-->
       <div class="row_box">
         <div class="row_tip">手机号：</div>
-        <Input class="row_input" v-model="user.phone" placeholder="输入手机号~" />
+        <Input class="row_input" v-model="admin.phone" placeholder="输入手机号~" />
       </div>
     </Modal>
 
-    <!--  删除用户 -->
+    <!--  删除管理员 -->
     <Modal
-      v-model="deleteusermodel.show"
-      title="删除用户"
-      @on-ok="deleteuser"
-      @on-cancel="closedeleteusermodel"
+      v-model="deleteadminmodel.show"
+      title="删除管理员"
+      @on-ok="deleteadmin"
+      @on-cancel="closedeleteadminmodel"
     >
-      <p>确定要删除该用户吗？</p>
+      <p>确定要删除该管理员吗？</p>
     </Modal>
   </div>
 </template>
@@ -89,21 +82,17 @@ export default {
       admin: false,
       columns12: [
         {
-          title: "用户ID",
-          key: "user_id"
+          title: "管理员ID",
+          key: "admin_id"
         },
         {
           title: "姓名",
-          key: "user_name",
-          slot: "user_name"
-        },
-        {
-          title: "性别",
-          key: "user_gender"
+          key: "admin_name",
+          slot: "admin_name"
         },
         {
           title: "手机",
-          key: "user_phone"
+          key: "admin_phone"
         },
         {
           title: "操作",
@@ -111,7 +100,7 @@ export default {
           align: "center"
         }
       ],
-      userlist: [],
+      adminlist: [],
       // 分页
       tablecount: 10,
       currentPage: 1,
@@ -119,17 +108,16 @@ export default {
 
       accountModal: {
         show: false,
-        type: "新增用户",
+        type: "新增管理员",
         info: {}
       },
-      deleteusermodel: {
+      deleteadminmodel: {
         show: false,
         info: {}
       },
-      user: {
+      admin: {
         id: "",
         name: "张三",
-        sex: "",
         phone: ""
       }
     };
@@ -139,55 +127,53 @@ export default {
     // 页码改变
     currpage_change(pagenum){
       this.currentPage = pagenum;
-      this.getuserlist();
+      this.getadminlist();
     },
     pagesize_change(pagesize){
       this.pageSize = pagesize;
       this.currentPage = 1;
-      this.getuserlist();
+      this.getadminlist();
     },
-    // 关闭编辑用户框
+    // 关闭编辑管理员框
     acountcancel() {
       this.accountModal.show = false;
     },
-    // 打开用户编辑框
+    // 打开管理员编辑框
     openeditaccountmodel(row) {
       this.accountModal = {
         show: true,
-        type: "编辑用户"
+        type: "编辑管理员"
       };
-      this.user = {
-        id: row.user_id,
-        name: row.user_name,
-        sex: row.user_gender,
-        phone: row.user_phone
+      this.admin = {
+        id: row.admin_id,
+        name: row.admin_name,
+        phone: row.admin_phone
       };
     },
-    // 修改用户
-    edituser() {
+    // 修改管理员
+    editadmin() {
       let data = {
-        user_id: this.user.id,
-        user_name: this.user.name,
-        user_phone: this.user.phone,
-        user_gender: this.user.sex
+        admin_id: this.admin.id,
+        admin_name: this.admin.name,
+        admin_phone: this.admin.phone,
       };
-      this.$http.post("kxlUser/updateUser", data).then(res => {
+      this.$http.post("kxlAdmin/updateAdmin", data).then(res => {
         if (res.data.code == 101) {
           this.$Message.success("更新成功！");
-          this.getuserlist();
+          this.getadminlist();
         } else {
           this.$Message.error(res.data.message);
         }
       });
     },
-    getuserlist() {
+    getadminlist() {
       let data = {
         currentPage: this.currentPage,
         pageSize: this.pageSize
       };
-      this.$http.post("kxlUser/selectUser", data).then(res => {
+      this.$http.post("kxlAdmin/selectAdmin", data).then(res => {
         if (res.data.code == 101) {
-          this.userlist = res.data.data.data;
+          this.adminlist = res.data.data.data;
           this.tablecount = res.data.data.count;
         } else {
           this.$Message.error(res.data.message);
@@ -195,23 +181,23 @@ export default {
       });
     },
     // 点击提示是否确认删除
-    opendeleteusermodel(row) {
-      this.deleteusermodel.show = true;
-      this.deleteusermodel.info = row;
+    opendeleteadminmodel(row) {
+      this.deleteadminmodel.show = true;
+      this.deleteadminmodel.info = row;
     },
-    // 关闭删除用户提示
-    closedeleteusermodel() {
-      this.deleteusermodel.show = false;
+    // 关闭删除管理员提示
+    closedeleteadminmodel() {
+      this.deleteadminmodel.show = false;
     },
-    // 删除用户
-    deleteuser() {
+    // 删除管理员
+    deleteadmin() {
       let data = {
-        user_id: this.deleteusermodel.info.user_id
+        admin_id: this.deleteadminmodel.info.admin_id
       };
-      this.$http.post("kxlUser/deleteUser", data).then(res => {
+      this.$http.post("kxlAdmin/deleteAdmin", data).then(res => {
         if (res.data.code == 101) {
           this.$Message.success("删除成功！");
-          this.getuserlist();
+          this.getadminlist();
         } else {
           this.$Message.error(res.data.message);
         }
@@ -219,12 +205,12 @@ export default {
     }
   },
   mounted() {
-    this.getuserlist();
+    this.getadminlist();
   }
 };
 </script>
 <style lang="less">
-.usermanage {
+.adminmanage {
   .content {
     width: 100%;
     margin: auto;
@@ -238,7 +224,7 @@ export default {
       text-align: center;
       margin-top: 20px;
     }
-    .usertable {
+    .admintable {
       width: 100%;
       padding: 20px;
       background-color: #fff;

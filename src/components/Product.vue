@@ -1,76 +1,83 @@
 <template>
-  <div class="addproduct">
-    <div class="content">
-      <div class="view_title">添加商品</div>
-      <div class="user">
-        <div class="company_logo clearfloat">
-          <div class="add_img1">
-            <input
-              title="点击选择文件"
-              class="upload_input"
-              type="file"
-              id="fileinput1"
-              @change="changepic"
-              accept=".jpg, .png"
-            />
-            <img class="add_pic" id="showimg" src="../assets/add_pic@2x.png" alt />
-            <span>添加商品图片</span>
+  <Drawer
+    :title="product_title"
+    width="800"
+    @on-close="close_productmodal"
+    :closable="false"
+    v-model="product_show"
+  >
+    <div class="product">
+      <div class="content">
+        <div class="view_title">{{product_title}}</div>
+        <div class="user">
+          <div class="company_logo clearfloat">
+            <div class="add_img1">
+              <input
+                title="点击选择文件"
+                class="upload_input"
+                type="file"
+                id="fileinput1"
+                @change="changepic"
+                accept=".jpg, .png"
+              />
+              <img class="add_pic" id="showimg" src="../assets/add_pic@2x.png" alt />
+              <span>添加商品图片</span>
+            </div>
           </div>
+          <Form ref="goodsdata" :model="goodsdata" :rules="ruleValidate" :label-width="80">
+            <FormItem label="商家id" prop="id">
+              <Input v-model="goodsdata.id" placeholder="输入商家id" />
+            </FormItem>
+            <FormItem label="商品名称" prop="name">
+              <Input v-model="goodsdata.name" placeholder="输入商品名称" />
+            </FormItem>
+            <FormItem label="商品价格" prop="price">
+              <Input v-model="goodsdata.price" placeholder="输入商品价格" />
+            </FormItem>
+            <FormItem label="商品品牌" prop="brand">
+              <Input v-model="goodsdata.brand" placeholder="输入商品品牌" />
+            </FormItem>
+            <FormItem label="商品简介" prop="sketch">
+              <Input
+                v-model="goodsdata.sketch"
+                type="textarea"
+                :autosize="{minRows: 2,maxRows: 5}"
+                placeholder="输入商品简介"
+              />
+            </FormItem>
+            <FormItem label="商品详情" prop="detailed">
+              <Input
+                v-model="goodsdata.detailed"
+                type="textarea"
+                :autosize="{minRows: 2,maxRows: 5}"
+                placeholder="输入商品详情"
+              />
+            </FormItem>
+            <FormItem label="商品类型" prop="classification">
+              <Select v-model="goodsdata.classification" placeholder="选择商品类型">
+                <Option
+                  v-for="classifyitem in product_typeList"
+                  :key="classifyitem.value"
+                  :value="classifyitem.value"
+                >{{classifyitem.label}}</Option>
+              </Select>
+            </FormItem>
+            <FormItem>
+              <Button type="primary" @click="handleSubmit('goodsdata')">提交</Button>
+              <Button v-if="product_title == '添加商品'" @click="handleReset('goodsdata')" style="margin-left: 8px">重置</Button>
+            </FormItem>
+          </Form>
         </div>
-        <Form ref="goodsdata" :model="goodsdata" :rules="ruleValidate" :label-width="80">
-          <FormItem label="商家id" prop="id">
-            <Input v-model="goodsdata.id" placeholder="输入商家id"/>
-          </FormItem>
-          <FormItem label="商品名称" prop="name">
-            <Input v-model="goodsdata.name" placeholder="输入商品名称"/>
-          </FormItem>
-          <FormItem label="商品价格" prop="price">
-            <Input v-model="goodsdata.price" placeholder="输入商品价格"/>
-          </FormItem>
-          <FormItem label="商品品牌" prop="brand">
-            <Input v-model="goodsdata.brand" placeholder="输入商品品牌"/>
-          </FormItem>
-          <FormItem label="商品简介" prop="sketch">
-            <Input
-              v-model="goodsdata.sketch"
-              type="textarea"
-              :autosize="{minRows: 2,maxRows: 5}"
-              placeholder="输入商品简介"
-            />
-          </FormItem>
-          <FormItem label="商品详情" prop="detailed">
-            <Input
-              v-model="goodsdata.detailed"
-              type="textarea"
-              :autosize="{minRows: 2,maxRows: 5}"
-              placeholder="输入商品详情"
-            />
-          </FormItem>
-          <FormItem label="商品类型" prop="classification">
-            <Select v-model="goodsdata.classification" placeholder="选择商品类型">
-              <Option
-                v-for="classifyitem in product_typeList"
-                :key="classifyitem.value"
-                :value="classifyitem.value"
-              >{{classifyitem.label}}</Option>
-            </Select>
-          </FormItem>
-          <FormItem>
-            <Button type="primary" @click="handleSubmit('goodsdata')">提交</Button>
-            <Button @click="handleReset('goodsdata')" style="margin-left: 8px">重置</Button>
-          </FormItem>
-        </Form>
-      </div>
-      <div class="index_footer">
-        <span>我是有底线的</span>
       </div>
     </div>
-  </div>
+  </Drawer>
 </template>
 <script>
 export default {
+  props: ["product_show", "product_title", "product_info"],
   data() {
     return {
+      info: {},
       product_id: "",
       product_name: "",
       product_price: "",
@@ -161,6 +168,10 @@ export default {
     };
   },
   methods: {
+    close_productmodal() {
+      this.$emit("getproductmodalshow", false);
+      this.handleReset('goodsdata');
+    },
     changepic() {
       let that = this;
       let a = document.getElementById("fileinput1");
@@ -230,7 +241,7 @@ export default {
             this.$http.post("kxlGoods/insertGoods", data).then(res => {
               if (res.data.code == 101) {
                 this.$Message.success("商品添加成功！");
-                this.handleReset();
+                this.handleReset('goodsdata');
               }
             });
           }
@@ -245,26 +256,43 @@ export default {
       img.setAttribute("src", this.img_bg);
     }
   },
+  watch: {
+    product_title(data) {
+    },
+    product_info(data) {
+      this.info = data;
+      this.goodsdata = {
+        id: this.info.goods_id.toString(),
+        name: this.info.goods_name,
+        price: this.info.goods_price.toString(),
+        brand: this.info.goods_brand,
+        sketch: this.info.goods_sketch,
+        detailed: this.info.goods_detailed,
+        classification: this.info.classification.toString()
+      };
+      let img = document.getElementById("showimg");
+      img.setAttribute("src", this.info.logo);
+      console.log(this.goodsdata)
+    }
+  },
   mounted() {}
 };
 </script>
 <style lang="less">
-.addproduct {
+.product {
   .content {
-    width: 1000px;
+    width: 100%;
     margin: auto;
+    padding-top: 10px;
     background-color: #e5e5e5;
     .view_title {
-      color: #f61700;
       font-size: 25px;
-      height: 50px;
-      line-height: 50px;
+      line-height: 40px;
       text-align: center;
-      margin-top: 20px;
     }
     .user {
       width: 100%;
-      padding: 20px 200px;
+      // padding: 20px 200px;
       background-color: #fff;
       .company_logo {
         width: 100%;
@@ -305,16 +333,6 @@ export default {
           cursor: pointer;
         }
       }
-    }
-
-    .index_footer {
-      width: 100%;
-      height: 80px;
-      background-color: #333333;
-      font-size: 20px;
-      line-height: 80px;
-      color: #686868;
-      text-align: center;
     }
   }
 }

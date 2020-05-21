@@ -35,7 +35,7 @@
         <div class="product_box" v-for=" item of phoneList" :key="item.goods_id">
           <Card class="product_card">
             <div style="width:380px;height:300px">
-              <img style="width:380px;height:300px" :src="item.logo" alt @click="lll" />
+              <img style="width:380px;height:300px" :src="item.logo" alt @click="toinfo(item)" />
             </div>
             <div class="describe">
               <div class="price">{{item.goods_name}}</div>
@@ -43,8 +43,12 @@
                 ￥
                 <span style="color:#f61700">{{item.goods_price}}</span>
               </div>
-              <Button style="margin-right:20px" type="primary">添加购物车</Button>
-              <Button type="error">直接购买</Button>
+              <Button
+                v-show="$store.state.usertype == 'user'"
+                style="margin-right:20px"
+                type="primary"
+                @click="add_cart(item)"
+              >添加购物车</Button>
             </div>
           </Card>
         </div>
@@ -61,7 +65,7 @@
       />
       <!-- <div class="index_footer">
         <span>我是有底线的</span>
-      </div> -->
+      </div>-->
     </div>
   </div>
 </template>
@@ -74,16 +78,37 @@ export default {
       // 分页
       tablecount: 10,
       currentPage: 1,
-      pageSize: 10,
+      pageSize: 10
     };
   },
   methods: {
+    // 加入购物车
+    add_cart(item) {
+      if (this.$store.state.Login == false) {
+        this.$Message.error("请先登录！");
+        return;
+      }
+      let data = {
+        user_id: this.$store.state.user.user_id,
+        goods_id: item.goods_id
+      };
+      this.$http.post("shoppingCart/addCart", data).then(res => {
+        if (res.data.code == 101) {
+          this.$Message.success("添加购物车成功！");
+        } else {
+          this.$Message.error(res.data.message);
+        }
+      });
+    },
+    toinfo(item) {
+      this.$router.push({ path: `/Home/ProductInfo/${item.goods_id}` });
+    },
     // 页码改变
-    currpage_change(pagenum){
-      this.currentPage = currpage;
+    currpage_change(pagenum) {
+      this.currentPage = pagenum;
       this.getphone();
     },
-    pagesize_change(pagesize){
+    pagesize_change(pagesize) {
       this.pageSize = pagesize;
       this.currentPage = 1;
       this.getphone();

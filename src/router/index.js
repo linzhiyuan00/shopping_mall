@@ -4,7 +4,9 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Cart from "../views/Cart.vue";
 import Login from "../views/Login.vue";
+import Register from "../views/Register.vue";
 import UserInfo from "../views/UserInfo.vue";
+import ProductInfo from "../views/ProductInfo.vue";
 import Usermanage from "../views/Usermanage.vue";
 import Adminmanage from "../views/Adminmanage.vue";
 import Storemanage from "../views/Storemanage.vue";
@@ -44,6 +46,11 @@ const routes = [
         component: Login,
       },
       {
+        path:'/Home/Register',
+        name: "Register",
+        component: Register,
+      },
+      {
         path:'/Home/Phone',
         name: "Phone",
         component: Phone,
@@ -77,6 +84,11 @@ const routes = [
         path:'/Home/UserInfo',
         name: "UserInfo",
         component: UserInfo,
+      },
+      {
+        path:'/Home/ProductInfo/:id',
+        name: "ProductInfo",
+        component: ProductInfo,
       },
       {
         path:'/Home/Usermanage',

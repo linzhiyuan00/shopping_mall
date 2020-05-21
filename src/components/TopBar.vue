@@ -17,36 +17,36 @@
       <Menu mode="horizontal" theme="light" active-name="1">
         <Submenu name="3">
           <template slot="title">
-            <Icon type="ios-contact" />用户信息
+            <Icon type="ios-contact" />{{user_type == 'user' ? '用户信息' :user_type == 'store' ? '商家信息' :'管理员信息'}}
           </template>
           <MenuItem name="1">
             <router-link class="classifyshop" to="/Home/UserInfo">个人信息</router-link>
           </MenuItem>
-          <MenuItem name="2">
-            <router-link class="classifyshop" to="/Home/Cart">购物车</router-link>
+          <MenuItem name="2" v-show="user_type == 'user'">
+            <router-link class="classifyshop"  to="/Home/Cart">购物车</router-link>
           </MenuItem>
-          <MenuItem name="3" v-show="admin == true">
+          <!-- <MenuItem name="3" v-show="admin == true">
             <router-link class="classifyshop" to="/Home/AddProduct">管理员添加商品</router-link>
-          </MenuItem>
-          <MenuItem name="4" v-show="admin == true">
+          </MenuItem> -->
+          <MenuItem name="4" v-show="user_type == 'admin'">
             <router-link class="classifyshop" to="/Home/Usermanage">用户管理</router-link>
           </MenuItem>
-          <MenuItem name="5" v-show="admin == true">
+          <MenuItem name="5" v-show="user_type == 'admin'">
             <router-link class="classifyshop" to="/Home/Adminmanage">管理员管理</router-link>
           </MenuItem>
-          <MenuItem name="6" v-show="admin == true">
+          <MenuItem name="6" v-show="user_type == 'admin'">
             <router-link class="classifyshop" to="/Home/Storemanage">商家管理</router-link>
           </MenuItem>
-          <MenuItem name="7" v-show="admin == true">
+          <MenuItem name="7" v-show="user_type == 'store' || user_type == 'admin'">
             <router-link class="classifyshop" to="/Home/Goodsmanage">商品管理</router-link>
           </MenuItem>
-          <MenuItem name="8" v-show="admin == true">
+          <MenuItem name="8" >
             <router-link class="classifyshop" to="/Home/Ordermanage">订单管理</router-link>
           </MenuItem>
         </Submenu>
       </Menu>
     </div>
-    <div class="cart" @click="toCart">
+    <div class="cart" @click="toCart" v-show="login == true && user_type == 'user'">
       <img style="width:40px;height:40px" src="../assets/img/cart.png" alt />
     </div>
   </div>
@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       login: false,
-      admin:false,
+      user_type:'user',
       route_active:0
     };
   },
@@ -73,12 +73,8 @@ export default {
         this.login = false;
       }
     },
-    "$store.state.isadmin": function(data) {
-      if (data == true) {
-        this.admin = true;
-      } else {
-        this.admin = false;
-      }
+    "$store.state.usertype": function(data) {
+      this.user_type = data;
     },
     "$route":function(data){
       if(data.name == 'index'){
@@ -100,11 +96,7 @@ export default {
     } else {
       this.login = false;
     }
-    if (this.$store.state.isadmin == true) {
-      this.admin = true;
-    } else {
-      this.admin = false;
-    }
+    this.user_type = this.$store.state.usertype;
   }
 };
 </script>

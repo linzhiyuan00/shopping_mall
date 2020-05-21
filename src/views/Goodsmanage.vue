@@ -11,6 +11,10 @@
           <template slot-scope="{ row }" slot="classification">
             <span>{{row.classification == 1 ? '手机': row.classification == 2 ? '平板':row.classification == 3 ? '笔记本':'配件'}}</span>
           </template>
+          <template slot-scope="{ row }" slot="state">
+            <span>{{row.state == 0 ? '待审核': row.state == 1 ? '已通过':row.state == 2 ? '已驳回': '已下架' }}</span>
+            <Button type="info" size="small" style="float: right" @click="auditstoremodel.show = true;auditstoremodel.info = row;aduitstate = row.state">修改</Button>
+          </template>
           <template slot-scope="{ row }" slot="action">
             <Button
               type="primary"
@@ -43,8 +47,21 @@
       <p>确定要删除该商品吗？</p>
     </Modal>
 
+    <!-- 修改商品状态 -->
+    <Modal
+      v-model="auditstoremodel.show"
+      title="审核商家"
+      @on-ok="auditstore"
+      @on-cancel="closeauditstoremodel"
+    >
+      <Select v-model="aduitstate">
+        <Option v-for="item in aduitstateList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+      </Select>
+    </Modal>
+
     <ProductDrawer
       @getproductmodalshow="getproductmodalshow"
+      @getgoodslist="getgoodslist"
       :product_show="productmodal.show"
       :product_title="productmodal.title"
       :product_info="productmodal.info"
@@ -96,11 +113,36 @@ export default {
           key: "goods_detailed"
         },
         {
+          title: "商品状态",
+          key: "state",
+          slot: "state",
+          width:120
+        },
+        {
           title: "操作",
           slot: "action",
           align: "center",
           width: 200
         }
+      ],
+      aduitstate:"",
+      aduitstateList:[
+        {
+          label:'待审核',
+          value:0
+        },
+        {
+          label:'已通过',
+          value:1
+        },
+        {
+          label:'已驳回',
+          value:2
+        },
+        {
+          label:'已下架',
+          value:3
+        },
       ],
       goodslist: [],
       // 分页
@@ -108,6 +150,10 @@ export default {
       currentPage: 1,
       pageSize: 10,
 
+      auditstoremodel: {
+        show: false,
+        info: {}
+      },
       productmodal: {
         show: false,
         title: "",
@@ -122,13 +168,33 @@ export default {
         name: "张三",
         sex: "",
         phone: ""
-      }
+      },
+      currstoreid:""
     };
   },
   watch: {},
   methods: {
     getproductmodalshow(state) {
       this.productmodal.show = state;
+    },
+    // 关闭修改商品状态
+    closeauditstoremodel() {
+      this.auditstoremodel.show = false;
+    },
+    // 修改商品状态
+    auditstore() {
+      let data = {
+        goods_id: this.auditstoremodel.info.goods_id,
+        state: this.aduitstate,
+      };
+      this.$http.post("kxlGoods/updateGoodsState", data).then(res => {
+        if (res.data.code == 101) {
+          this.$Message.success("审核成功！");
+          this.getgoodslist();
+        } else {
+          this.$Message.error(res.data.message);
+        }
+      });
     },
     // 页码改变
     currpage_change(pagenum) {
@@ -155,7 +221,8 @@ export default {
     getgoodslist() {
       let data = {
         currentPage: this.currentPage,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        store_id:this.currstoreid == '' ? undefined :this.currstoreid
       };
       this.$http.post("kxlGoods/selectAllGoods", data).then(res => {
         if (res.data.code == 101) {
@@ -191,6 +258,11 @@ export default {
     }
   },
   mounted() {
+    if(this.$store.state.usertype == 'store'){
+      this.currstoreid = this.$store.state.user.store_id;
+    }else{
+      this.currstoreid = '';
+    }
     this.getgoodslist();
   }
 };

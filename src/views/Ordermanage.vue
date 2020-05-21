@@ -113,7 +113,6 @@
 export default {
   data() {
     return {
-      admin: false,
       columns12: [
         {
           title: "订单ID",
@@ -184,10 +183,13 @@ export default {
         name: "张三",
         sex: "",
         phone: ""
-      }
+      },
+      currstoreid:"",
+      curruserid:"",
     };
   },
-  watch: {},
+  watch: {
+  },
   methods: {
     // 页码改变
     currpage_change(pagenum) {
@@ -239,7 +241,9 @@ export default {
     getorderlist() {
       let data = {
         currentPage: this.currentPage,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        store_id:this.currstoreid == "" ? undefined :this.currstoreid,
+        user_id:this.curruserid == "" ? undefined :this.curruserid
       };
       this.$http.post("kxlOrder/selectOrder", data).then(res => {
         if (res.data.code == 101) {
@@ -302,6 +306,17 @@ export default {
     },
   },
   mounted() {
+    if(this.$store.state.usertype == 'store'){
+      this.currstoreid =  this.$store.state.user.store_id;
+      this.curruserid = "";
+    }else if(this.$store.state.usertype == 'user'){
+      this.curruserid = this.$store.state.user.user_id;
+      this.currstoreid = "";
+    }
+    else{
+      this.curruserid = "";
+      this.currstoreid = "";
+    }
     this.getorderlist();
   }
 };

@@ -5,23 +5,30 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    Login:true,
-    isadmin:true
+    Login:false,
+    usertype:'user',
+    user:{}
   },
   mutations: {
     LOGIN_STATE(state,login){
       state.Login = login;
     },
-    ADMIN_STATE(state,admin){
-      state.isadmin = admin;
-    }
+    USER_TYPE(state,usertype){
+      state.usertype = usertype;
+    },
+    USER(state,user){
+      state.user = user;
+    },
   },
   actions: {
     update_loginstate(context,login){
       context.commit('LOGIN_STATE',login);
     },
-    update_isadmin(context,admin){
-      context.commit('ADMIN_STATE',admin);
+    update_usertype(context,usertype){
+      context.commit('USER_TYPE',usertype);
+    },
+    update_user(context,user){
+      context.commit('USER',user);
     }
   },
   modules: {}

@@ -36,7 +36,7 @@
           <div class="mod_productshow">
             <Card class="product_box" v-for="(item) in phonedata" :key="item.goods_id">
               <div class="tip">{{item.goods_name}}</div>
-              <img style="width:200px;height:160px" :src="item.logo" alt @click="lll" />
+              <img style="width:200px;height:160px" :src="item.logo" alt @click="toinfo(item)" />
             </Card>
             <Card class="Jumptip">
               <router-link class="classifyjump" to="/Home/Phone">手机专区</router-link>
@@ -48,7 +48,7 @@
           <div class="mod_productshow">
             <Card class="product_box" v-for="(item) in notebookdata" :key="item.goods_id">
               <div class="tip">{{item.goods_name}}</div>
-              <img style="width:200px;height:160px" :src="item.logo" alt @click="lll" />
+              <img style="width:200px;height:160px" :src="item.logo" alt @click="toinfo(item)" />
             </Card>
             <Card class="Jumptip">
               <router-link class="classifyjump" to="/Home/Flat">平板专区</router-link>
@@ -60,7 +60,7 @@
           <div class="mod_productshow">
             <Card class="product_box" v-for="(item) in flatdata" :key="item.goods_id">
               <div class="tip">{{item.goods_name}}</div>
-              <img style="width:200px;height:160px" :src="item.logo" alt @click="lll" />
+              <img style="width:200px;height:160px" :src="item.logo" alt @click="toinfo(item)" />
             </Card>
             <Card class="Jumptip">
               <router-link class="classifyjump" to="/Home/NoteBook">笔记本专区</router-link>
@@ -72,7 +72,7 @@
           <div class="mod_productshow">
             <Card class="product_box" v-for="(item) in partsdata" :key="item.goods_id">
               <div class="tip">{{item.goods_name}}</div>
-              <img style="width:200px;height:160px" :src="item.logo" alt @click="lll" />
+              <img style="width:200px;height:160px" :src="item.logo" alt @click="toinfo(item)" />
             </Card>
             <Card class="Jumptip">
               <router-link class="classifyjump" to="/Home/Parts">配件专区</router-link>
@@ -98,8 +98,8 @@ export default {
     };
   },
   methods: {
-    lll() {
-      console.log("111");
+    toinfo(item) {
+      this.$router.push({ path: `/Home/ProductInfo/${item.goods_id}` });
     },
     getphone() {
       let data = {

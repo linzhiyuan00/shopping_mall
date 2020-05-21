@@ -178,7 +178,10 @@ export default {
         } else {
           this.$Message.error(res.data.message);
         }
-      });
+      })
+      .catch(err =>{
+        console.log(err)
+      })
     },
     // 点击提示是否确认删除
     opendeleteadminmodel(row) {

@@ -25,8 +25,8 @@
             </div>
           </div>
           <Form ref="goodsdata" :model="goodsdata" :rules="ruleValidate" :label-width="80">
-            <FormItem label="商家id" prop="id">
-              <Input v-model="goodsdata.id" placeholder="输入商家id" />
+            <FormItem :label="product_title == '添加商品' ?'商家id' :'商品id'" prop="id">
+              <Input v-model="goodsdata.id" placeholder="输入id" />
             </FormItem>
             <FormItem label="商品名称" prop="name">
               <Input v-model="goodsdata.name" placeholder="输入商品名称" />
@@ -64,7 +64,11 @@
             </FormItem>
             <FormItem>
               <Button type="primary" @click="handleSubmit('goodsdata')">提交</Button>
-              <Button v-if="product_title == '添加商品'" @click="handleReset('goodsdata')" style="margin-left: 8px">重置</Button>
+              <Button
+                v-if="product_title == '添加商品'"
+                @click="handleReset('goodsdata')"
+                style="margin-left: 8px"
+              >重置</Button>
             </FormItem>
           </Form>
         </div>
@@ -170,7 +174,7 @@ export default {
   methods: {
     close_productmodal() {
       this.$emit("getproductmodalshow", false);
-      this.handleReset('goodsdata');
+      this.handleReset("goodsdata");
     },
     changepic() {
       let that = this;
@@ -222,33 +226,64 @@ export default {
       });
     },
     handleSubmit(name) {
-      this.$refs[name].validate(valid => {
-        if (valid) {
-          console.log(this.image, Object.prototype.toString.call(this.image));
-          if (Object.prototype.toString.call(this.image) == "[object Object]") {
-            this.$Message.error("商品图片不能为空！");
+      if (this.product_title == "添加商品") {
+        this.$refs[name].validate(valid => {
+          if (valid) {
+            console.log('添加');
+            // Object.prototype.toString.call(this.image) == "[object Object]"
+            if (this.logo == "") {
+              this.$Message.error("商品图片不能为空！");
+            } else {
+              let data = {
+                store_id: this.goodsdata.id,
+                classification: this.goodsdata.classification,
+                goods_name: this.goodsdata.name,
+                goods_price: this.goodsdata.price,
+                goods_brand: this.goodsdata.brand,
+                goods_sketch: this.goodsdata.sketch,
+                goods_detailed: this.goodsdata.detailed,
+                logo: this.logo
+              };
+              this.$http.post("kxlGoods/insertGoods", data).then(res => {
+                if (res.data.code == 101) {
+                  this.$Message.success("添加成功！");
+                  this.close_productmodal();
+                  this.$emit('getgoodslist')
+                }
+              });
+            }
           } else {
-            let data = {
-              store_id: this.goodsdata.id,
-              classification: this.goodsdata.classification,
-              goods_name: this.goodsdata.name,
-              goods_price: this.goodsdata.price,
-              goods_brand: this.goodsdata.brand,
-              goods_sketch: this.goodsdata.sketch,
-              goods_detailed: this.goodsdata.detailed,
-              logo: this.logo
-            };
-            this.$http.post("kxlGoods/insertGoods", data).then(res => {
-              if (res.data.code == 101) {
-                this.$Message.success("商品添加成功！");
-                this.handleReset('goodsdata');
-              }
-            });
           }
-        } else {
-          console.log(this.image, Object.prototype.toString.call(this.image));
-        }
-      });
+        });
+      } else {
+        this.$refs[name].validate(valid => {
+          if (valid) {
+            console.log('修改');
+            // Object.prototype.toString.call(this.image) == "[object Object]"
+            if (this.logo == "") {
+              this.$Message.error("商品图片不能为空！");
+            } else {
+              let data = {
+                goods_id: this.goodsdata.id,
+                classification: this.goodsdata.classification,
+                goods_name: this.goodsdata.name,
+                goods_price: this.goodsdata.price,
+                goods_brand: this.goodsdata.brand,
+                goods_sketch: this.goodsdata.sketch,
+                goods_detailed: this.goodsdata.detailed,
+                logo: this.logo
+              };
+              this.$http.post("kxlGoods/updateGoods", data).then(res => {
+                if (res.data.code == 101) {
+                  this.$Message.success("修改成功！");
+                  this.close_productmodal();
+                }
+              });
+            }
+          } else {
+          }
+        });
+      }
     },
     handleReset(name) {
       this.$refs[name].resetFields();
@@ -257,22 +292,24 @@ export default {
     }
   },
   watch: {
-    product_title(data) {
-    },
+    product_title(data) {},
     product_info(data) {
-      this.info = data;
-      this.goodsdata = {
-        id: this.info.goods_id.toString(),
-        name: this.info.goods_name,
-        price: this.info.goods_price.toString(),
-        brand: this.info.goods_brand,
-        sketch: this.info.goods_sketch,
-        detailed: this.info.goods_detailed,
-        classification: this.info.classification.toString()
-      };
-      let img = document.getElementById("showimg");
-      img.setAttribute("src", this.info.logo);
-      console.log(this.goodsdata)
+      if (Object.keys(data).length !== 0) {
+        this.info = data;
+        this.goodsdata = {
+          id: this.info.goods_id.toString(),
+          name: this.info.goods_name,
+          price: this.info.goods_price.toString(),
+          brand: this.info.goods_brand,
+          sketch: this.info.goods_sketch,
+          detailed: this.info.goods_detailed,
+          classification: this.info.classification.toString()
+        };
+        this.logo = this.info.logo;
+        let img = document.getElementById("showimg");
+        img.setAttribute("src", this.info.logo);
+        console.log(this.goodsdata);
+      }
     }
   },
   mounted() {}

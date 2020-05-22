@@ -14,7 +14,7 @@
               style="margin-right: 5px"
               @click="openeditaccountmodel(row)"
             >编辑</Button>
-            <Button type="error" size="small" @click="opendeleteadminmodel(row)">删除</Button>
+            <!-- <Button type="error" size="small" @click="opendeleteadminmodel(row)">删除</Button> -->
           </template>
         </Table>
       </div>

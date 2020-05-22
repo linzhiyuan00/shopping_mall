@@ -84,6 +84,10 @@ export default {
           if (res.data.code == 101) {
             this.$Message.success("退出成功！");
             localStorage.setItem("userphone", '');
+            localStorage.setItem("userinfo", '');
+            this.$store.dispatch("update_loginstate", false);
+            this.$store.dispatch("update_user", '');
+            this.$store.dispatch("update_usertype", '');
             this.$router.push({ name: "Login" });
             
           } else {

@@ -9,11 +9,30 @@
           </template>
           <template slot-scope="{ row }" slot="payment_state">
             <strong>{{ row.payment_state == 0 ? '待支付' :'已支付' }}</strong>
-            <Button type="info" size="small" style="float: right" @click="openeditpayeordermodel(row)">修改</Button>
+            <Button
+              v-if="$store.state.usertype == 'store'"
+              type="info"
+              size="small"
+              style="float: right"
+              @click="openeditpayeordermodel(row)"
+            >修改</Button>
+            <Button
+              v-if="$store.state.usertype == 'user' && row.payment_state == 0"
+              type="info"
+              size="small"
+              style="float: right"
+              @click="topay(row)"
+            >支付</Button>
           </template>
           <template slot-scope="{ row }" slot="operation_state">
             <strong>{{ row.operation_state == 0 ? '已下单' : row.operation_state == 1 ? '已发货' :'交易完成'}}</strong>
-            <Button type="info" size="small" style="float: right" @click="openeditoperateordermodel(row)" >修改</Button>
+            <Button
+              v-if="$store.state.usertype == 'store'"
+              type="info"
+              size="small"
+              style="float: right"
+              @click="openeditoperateordermodel(row)"
+            >修改</Button>
           </template>
           <template slot-scope="{ row }" slot="action">
             <Button
@@ -36,7 +55,6 @@
         style="float:right;margin:20px"
       />
     </div>
-
     <!-- 订单详情 -->
     <Modal
       v-model="accountModal.show"
@@ -47,37 +65,42 @@
       ok-text="保存"
       @on-cancel="acountcancel"
     >
-      <div class="row_box">
+      <!-- <div class="row_box">
         <div class="row_tip">订单ID：</div>
-        <span class="row_content">{{accountModal.info.order_id}}</span>
+        <span class="row_content">{{accountModal.info.goods_name}}</span>
+      </div>-->
+      <div class="row_box">
+        <div class="row_tip">商品名称：</div>
+        <span class="row_content">{{accountModal.info.goods_name}}</span>
       </div>
       <div class="row_box">
-        <div class="row_tip">顾客id：</div>
-        <span class="row_content">{{accountModal.info.user_id}}</span>
+        <div class="row_tip">商品数量：</div>
+        <span class="row_content">{{accountModal.info.number}}</span>
       </div>
       <div class="row_box">
-        <div class="row_tip">商家id：</div>
-        <span class="row_content">{{accountModal.info.store_id}}</span>
+        <div class="row_tip">商品价格￥：</div>
+        <span class="row_content">{{accountModal.info.goods_price}}</span>
       </div>
       <div class="row_box">
-        <div class="row_tip">支付价格：</div>
-        <span class="row_content">{{accountModal.info.payment_amount}}</span>
+        <div class="row_tip">商品分类：</div>
+        <span
+          class="row_content"
+        >{{accountModal.info.classification == 1 ? '手机' :accountModal.info.classification == 2 ? '平板':accountModal.info.classification == 3? '笔记本' :'配件'}}</span>
       </div>
       <div class="row_box">
-        <div class="row_tip">收货人：</div>
-        <span class="row_content">{{accountModal.info.order_id}}</span>
+        <div class="row_tip">商品品牌：</div>
+        <span class="row_content">{{accountModal.info.goods_brand}}</span>
       </div>
       <div class="row_box">
-        <div class="row_tip">收货地址：</div>
-        <span class="row_content">{{accountModal.info.receiving_address}}</span>
+        <div class="row_tip">商品简介：</div>
+        <span class="row_content">{{accountModal.info.goods_sketch}}</span>
       </div>
       <div class="row_box">
-        <div class="row_tip">支付状态：</div>
-        <span class="row_content">{{accountModal.info.payment_state == 0 ? '待支付' :'已支付'}}</span>
-      </div>
-      <div class="row_box">
-        <div class="row_tip">操作状态：</div>
-        <span class="row_content">{{accountModal.info.operation_state == 0 ? '已下单' : accountModal.info.operation_state == 1 ? '已发货' :'交易完成'}}</span>
+        <div class="row_tip">商品详情：</div>
+        <span
+          class="row_content"
+          :title="accountModal.info.goods_detailed"
+        >{{accountModal.info.goods_detailed}}</span>
       </div>
     </Modal>
 
@@ -91,7 +114,7 @@
       <RadioGroup v-model="editpayeordermodel.value">
         <Radio :label="0">待支付</Radio>
         <Radio :label="1">已支付</Radio>
-    </RadioGroup>
+      </RadioGroup>
     </Modal>
 
     <!--  修改订单操作状态 -->
@@ -105,26 +128,29 @@
         <Radio :label="0">已下单</Radio>
         <Radio :label="1">已发货</Radio>
         <Radio :label="2">交易完成</Radio>
-    </RadioGroup>
+      </RadioGroup>
     </Modal>
+
+      <div style="display:none" v-html="paydata"></div>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      paydata:"",
       columns12: [
+        // {
+        //   title: "订单ID",
+        //   key: "order_id"
+        // },
         {
-          title: "订单ID",
-          key: "order_id"
+          title: "顾客姓名",
+          key: "user_name"
         },
         {
-          title: "顾客id",
-          key: "user_id"
-        },
-        {
-          title: "商家id",
-          key: "store_id"
+          title: "商家姓名",
+          key: "store_name"
         },
         {
           title: "支付价格",
@@ -170,12 +196,12 @@ export default {
       },
       editpayeordermodel: {
         show: false,
-        value:0,
+        value: 0,
         info: {}
       },
       editoperateordermodel: {
         show: false,
-        value:0,
+        value: 0,
         info: {}
       },
       order: {
@@ -184,13 +210,28 @@ export default {
         sex: "",
         phone: ""
       },
-      currstoreid:"",
-      curruserid:"",
+      currstoreid: "",
+      curruserid: ""
     };
   },
-  watch: {
-  },
+  watch: {},
   methods: {
+    topay(row) {
+      let data = {
+        order_id: row.order_id,
+        price: row.payment_amount
+      };
+      this.$http.post("pay/payment", data).then(res => {
+        if (res.data.code == 101) {
+          this.paydata = res.data.data;
+        } else {
+          this.$Message.error(res.data.message);
+        }
+      })
+      .finally(() =>{
+        document.forms[0].submit();
+      })
+    },
     // 页码改变
     currpage_change(pagenum) {
       this.currentPage = pagenum;
@@ -209,41 +250,24 @@ export default {
     openeditaccountmodel(row) {
       this.accountModal.info = row;
       this.accountModal.show = true;
-      // let data = {
-      //   order_id: row.order_id
-      // };
-      // this.$http.post("kxlOrder/selectOrderContent", data).then(res => {
-      //   if (res.data.code == 101) {
-      //     this.accountModal.info = res.data.data;
-      //     this.accountModal.show = true;
-      //   } else {
-      //     this.$Message.error(res.data.message);
-      //   }
-      // });
+      let data = {
+        order_id: row.order_id
+      };
+      this.$http.post("kxlOrder/selectOrderContent", data).then(res => {
+        if (res.data.code == 101) {
+          this.accountModal.info = res.data.data[0];
+          this.accountModal.show = true;
+        } else {
+          this.$Message.error(res.data.message);
+        }
+      });
     },
-    // 修改订单
-    // editorder() {
-    //   let data = {
-    //     order_id: this.order.id,
-    //     order_name: this.order.name,
-    //     order_phone: this.order.phone,
-    //     order_gender: this.order.sex
-    //   };
-    //   this.$http.post("kxlorder/updateorder", data).then(res => {
-    //     if (res.data.code == 101) {
-    //       this.$Message.success("更新成功！");
-    //       this.getorderlist();
-    //     } else {
-    //       this.$Message.error(res.data.message);
-    //     }
-    //   });
-    // },
     getorderlist() {
       let data = {
         currentPage: this.currentPage,
         pageSize: this.pageSize,
-        store_id:this.currstoreid == "" ? undefined :this.currstoreid,
-        user_id:this.curruserid == "" ? undefined :this.curruserid
+        store_id: this.currstoreid == "" ? undefined : this.currstoreid,
+        user_id: this.curruserid == "" ? undefined : this.curruserid
       };
       this.$http.post("kxlOrder/selectOrder", data).then(res => {
         if (res.data.code == 101) {
@@ -268,7 +292,7 @@ export default {
     editpayeorder() {
       let data = {
         order_id: this.editpayeordermodel.info.order_id,
-        payment_state:this.editpayeordermodel.value
+        payment_state: this.editpayeordermodel.value
       };
       this.$http.post("kxlOrder/updatePaymentState", data).then(res => {
         if (res.data.code == 101) {
@@ -279,7 +303,7 @@ export default {
         }
       });
     },
-     // 点击提示是否确认修改订单操作状态
+    // 点击提示是否确认修改订单操作状态
     openeditoperateordermodel(row) {
       this.editoperateordermodel.show = true;
       this.editoperateordermodel.value = row.payment_state;
@@ -293,7 +317,7 @@ export default {
     editoperateorder() {
       let data = {
         order_id: this.editoperateordermodel.info.order_id,
-        operation_state:this.editoperateordermodel.value
+        operation_state: this.editoperateordermodel.value
       };
       this.$http.post("kxlOrder/updateOperationState", data).then(res => {
         if (res.data.code == 101) {
@@ -303,17 +327,16 @@ export default {
           this.$Message.error(res.data.message);
         }
       });
-    },
+    }
   },
   mounted() {
-    if(this.$store.state.usertype == 'store'){
-      this.currstoreid =  this.$store.state.user.store_id;
+    if (this.$store.state.usertype == "store") {
+      this.currstoreid = this.$store.state.user.store_id;
       this.curruserid = "";
-    }else if(this.$store.state.usertype == 'user'){
+    } else if (this.$store.state.usertype == "user") {
       this.curruserid = this.$store.state.user.user_id;
       this.currstoreid = "";
-    }
-    else{
+    } else {
       this.curruserid = "";
       this.currstoreid = "";
     }
@@ -364,11 +387,15 @@ export default {
       font-size: 16px;
       line-height: 32px;
     }
-    .row_content{
+    .row_content {
       float: left;
+      width: 300px;
       color: #f61700;
       font-size: 14px;
       line-height: 32px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .row_input {
       float: left;

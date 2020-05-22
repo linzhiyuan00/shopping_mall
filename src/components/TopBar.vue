@@ -17,7 +17,7 @@
       <Menu mode="horizontal" theme="light" active-name="1">
         <Submenu name="3">
           <template slot="title">
-            <Icon type="ios-contact" />{{user_type == 'user' ? '用户信息' :user_type == 'store' ? '商家信息' :'管理员信息'}}
+            <Icon type="ios-contact" />{{user_type == 'user' ? '用户' :user_type == 'store' ? '商家' :'管理员'}}
           </template>
           <MenuItem name="1">
             <router-link class="classifyshop" to="/Home/UserInfo">个人信息</router-link>

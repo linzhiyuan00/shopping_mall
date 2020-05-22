@@ -21,7 +21,26 @@
               class="price"
               style="float:left;height:100%;width:200px;font-size:14px;line-height:80px;color:#f61700"
             >￥:{{item.kxlGoods.goods_price}}</div>
-            <Checkbox v-model="item.kxlGoods.check" style="margin-top:10px;">选中下单</Checkbox>
+            <div
+              class="num"
+              style="float:left;height:100%;width:50px;font-size:14px;line-height:80px;color:#f61700"
+            >{{item.kxlGoods.goodsnum}}</div>
+            <div
+              class="changnum"
+              style="float:left;height:100%;width:50px;font-size:14px;line-height:80px;color:#f61700"
+            >
+              <div
+                class="addnum"
+                @click="addnum(item)"
+                style="float:left;height:50%;width:50px;font-size:14px;line-height:40px;color:#2d8cf0;cursor:pointer;"
+              >+</div>
+              <div
+                class="reducenum"
+                @click="reducenum(item)"
+                style="float:left;height:50%;width:50px;font-size:14px;line-height:40px;color:#2d8cf0;cursor:pointer;"
+              >-</div>
+            </div>
+            <Checkbox v-model="item.kxlGoods.check" style="margin-top:17px;">选中下单</Checkbox>
             <Button
               type="error"
               style="margin-right:10px;float:right;margin-top:25px;"
@@ -85,6 +104,17 @@ export default {
     };
   },
   methods: {
+    addnum(item) {
+      item.kxlGoods.goodsnum = +item.kxlGoods.goodsnum + 1;
+      this.$forceUpdate();
+    },
+    reducenum(item) {
+      if(+item.kxlGoods.goodsnum == 1){
+      }else{
+        item.kxlGoods.goodsnum = +item.kxlGoods.goodsnum - 1;
+      }
+      this.$forceUpdate();
+    },
     close_order() {
       this.create_ordermodal.show = false;
     },
@@ -125,7 +155,7 @@ export default {
         if (res.data.code == 101) {
           let goodsnumber = [
             {
-              number: "1",
+              number: this.orderlist[0].goodsnum.toString(),
               goodsId: this.orderlist[0].goods_id.toString()
             }
           ];
@@ -141,7 +171,7 @@ export default {
           };
           this.$http.post("kxlOrder/insertOrder", data).then(res => {
             if (res.data.code == 101) {
-              this.$Message.success('下单成功！')
+              this.$Message.success("下单成功！");
               this.getcartlist();
             } else {
               this.$Message.error(res.data.message);
@@ -161,6 +191,7 @@ export default {
           this.cartlist = res.data.data;
           for (let i of this.cartlist) {
             i.kxlGoods.check = false;
+            i.kxlGoods.goodsnum = 1;
           }
         } else {
           this.$Message.error(res.data.message);

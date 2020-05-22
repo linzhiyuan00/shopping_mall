@@ -13,7 +13,7 @@
           </template>
           <template slot-scope="{ row }" slot="state">
             <span>{{row.state == 0 ? '待审核': row.state == 1 ? '已通过':row.state == 2 ? '已驳回': '已下架' }}</span>
-            <Button type="info" size="small" style="float: right" @click="auditstoremodel.show = true;auditstoremodel.info = row;aduitstate = row.state">修改</Button>
+            <Button v-if="$store.state.usertype == 'admin'" type="info" size="small" style="float: right" @click="auditstoremodel.show = true;auditstoremodel.info = row;aduitstate = row.state">修改</Button>
           </template>
           <template slot-scope="{ row }" slot="action">
             <Button
@@ -210,7 +210,9 @@ export default {
      openaddgoodsmodel() {
       this.productmodal.show = true;
       this.productmodal.title = "添加商品";
-      this.productmodal.info = {};
+      this.productmodal.info = {
+        store_id:this.$store.state.user.store_id
+      };
     },
     // 打开商品编辑框
     openeditaccountmodel(row) {

@@ -128,6 +128,8 @@ export default {
               this.$store.dispatch("update_usertype", this.user.usertype);
               this.$store.dispatch("update_user", res.data);
               localStorage.setItem("userphone", this.user.phone);
+              localStorage.setItem("userinfo",JSON.stringify(res.data));
+              localStorage.setItem("usertype",this.user.usertype);
               this.$Message.success("登录成功");
               this.$router.push({ name: "index" });
             } else {

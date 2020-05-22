@@ -37,14 +37,14 @@
             <span class="info_title">商品详情：</span>
             <span class="info_content">{{productinfo.goods_detailed}}</span>
           </div>
-          <div class="info_row">
+          <!-- <div class="info_row">
             <span class="info_title">商家id：</span>
             <span class="info_content">{{productinfo.store_id}}</span>
-          </div>
+          </div> -->
         </div>
       </div>
       <div v-show="$store.state.usertype == 'user'">
-        <Button type="primary" style="margin-right:10px;" @click="add_cart">加入购物车</Button>
+        <Button type="primary" style="margin-right:10px;margin-top:30px;" @click="add_cart">加入购物车</Button>
       </div>
       <!-- <div class="index_footer">
         <span>我是有底线的</span>

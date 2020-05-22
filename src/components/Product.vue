@@ -294,7 +294,9 @@ export default {
   watch: {
     product_title(data) {},
     product_info(data) {
-      if (Object.keys(data).length !== 0) {
+      if(Object.keys(data).length == 1){
+        this.goodsdata.id = data.store_id.toString();
+      }else if (Object.keys(data).length > 1) {
         this.info = data;
         this.goodsdata = {
           id: this.info.goods_id.toString(),
